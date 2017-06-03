@@ -195,10 +195,10 @@ def reduce_over_partition(discr_func, partition, reduction, pad_const=0,
     # Positions of the first and last partition points that still lie in
     # the spatial domain, relative to the space partition
     pl_idx = np.array(
-        np.round(spc.index(smin_partpt, floating=True)).astype(int),
+        np.round(spc.partition.index(smin_partpt, floating=True)).astype(int),
         ndmin=1)
     pr_idx = np.array(
-        np.round(spc.index(smax_partpt, floating=True)).astype(int),
+        np.round(spc.partition.index(smax_partpt, floating=True)).astype(int),
         ndmin=1)
     s_inner_slc = [slice(li, ri) for li, ri in zip(pl_idx, pr_idx)]
 

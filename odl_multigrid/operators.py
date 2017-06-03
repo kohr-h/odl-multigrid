@@ -112,10 +112,10 @@ class MaskingOperator(Operator):
         # Find the indices of the mask min and max. The floating point
         # versions are also required for the linear transition.
         idx_min_flt = np.array(
-            self.domain.index(self.min_pt, floating=True),
+            self.domain.partition.index(self.min_pt, floating=True),
             ndmin=1)
         idx_max_flt = np.array(
-            self.domain.index(self.max_pt, floating=True),
+            self.domain.partition.index(self.max_pt, floating=True),
             ndmin=1)
 
         # To deal with coinciding boundaries we introduce an epsilon tolerance
