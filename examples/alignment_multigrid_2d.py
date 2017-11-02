@@ -22,8 +22,8 @@ class TranslationOperatorFixedTempl(odl.Operator):
         """
         assert isinstance(f, odl.DiscreteLpElement)
         self.f = f
-        super().__init__(domain=odl.space.rn(f.space.ndim), range=f.space,
-                         linear=False)
+        super(TranslationOperatorFixedTempl, self).__init__(
+            domain=odl.space.rn(f.space.ndim), range=f.space, linear=False)
 
     def _call(self, t):
         """Translate ``self.f`` by ``t``.
@@ -77,7 +77,8 @@ class TranslationCostFixedTempl(odl.solvers.Functional):
             assert g in self.op.range
         self.g = g
 
-        super().__init__(space=self.trans_op.domain, linear=False)
+        super(TranslationCostFixedTempl, self).__init__(
+            space=self.trans_op.domain, linear=False)
 
     def _call(self, t):
         """Evaluate the cost at ``t``."""
@@ -100,8 +101,8 @@ class TranslationCostFixedTempl(odl.solvers.Functional):
 
             def __init__(self):
                 """Initialize a new instance."""
-                super().__init__(domain=func.domain, range=func.domain,
-                                 linear=False)
+                super(TranslationCostFixedTemplGrad, self).__init__(
+                    domain=func.domain, range=func.domain, linear=False)
 
             def _call(self, t):
                 """Evaluate the gradient in ``t``."""

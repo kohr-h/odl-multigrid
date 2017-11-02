@@ -11,7 +11,8 @@ shape_fbp = (512, 512)
 space_fbp = odl.uniform_discr(vol_min, vol_min + vol_size, shape_fbp)
 
 # Set paths and file names
-data_path = '/home/hkohr/SciData/Head_CT_Sim/'
+data_path = '/export/scratch2/kohr/data/Head_CT_Sim/'
+# data_path = '/home/hkohr/SciData/Head_CT_Sim/'
 data_fname = 'HelicalSkullCT_70100644Phantom_no_bed_Dose150mGy_2D_120kV.npy'
 
 # Explicitly instantiate geometry since unpickling is very fragile

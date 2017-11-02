@@ -8,14 +8,7 @@
 
 """Operators for multigrid applications."""
 
-# Imports for common Python 2/3 codebase
-from __future__ import print_function, division, absolute_import
-from future import standard_library
-standard_library.install_aliases()
-from builtins import super
-
 import numpy as np
-
 from odl.operator import Operator
 from odl.util import writable_array
 from odl.util.numerics import apply_on_boundary
@@ -85,7 +78,8 @@ class MaskingOperator(Operator):
         >>> print(masked_one.asarray())
         [ 1.    0.5   0.    0.25  1.  ]
         """
-        super().__init__(domain=space, range=space, linear=True)
+        super(MaskingOperator, self).__init__(
+            domain=space, range=space, linear=True)
         self.__min_pt = np.array(min_pt, ndmin=1)
         self.__max_pt = np.array(max_pt, ndmin=1)
         if self.min_pt.shape != (self.domain.ndim,):

@@ -8,30 +8,14 @@
 
 """Numerical helpers related to multigrid applications."""
 
-# Imports for common Python 2/3 codebase
-from __future__ import print_function, division, absolute_import
-from future import standard_library
-standard_library.install_aliases()
-from builtins import super
-
 from itertools import product
 import numpy as np
-
 from odl.discr.lp_discr import DiscreteLpElement
 from odl.discr.partition import RectPartition
-from odl.operator import Operator
-from odl.util import writable_array, dtype_repr
-from odl.util.numerics import apply_on_boundary
+from odl.util import dtype_repr
 
 
 __all__ = ('reduce_over_partition',)
-
-
-def _apply_reduction(arr, out, reduction, axes):
-    try:
-        reduction(arr, axis=axes, out=out)
-    except TypeError:
-        out[:] = reduction(arr, axis=axes)
 
 
 def reduce_over_partition(discr_func, partition, reduction, pad_const=0,
@@ -280,6 +264,13 @@ def reduce_over_partition(discr_func, partition, reduction, pad_const=0,
                 _apply_reduction(arr=f_view.reshape(red_shp), out=out_view,
                                  axes=reduce_axes, reduction=reduction)
     return out
+
+
+def _apply_reduction(arr, out, reduction, axes):
+    try:
+        reduction(arr, axis=axes, out=out)
+    except TypeError:
+        out[:] = reduction(arr, axis=axes)
 
 
 if __name__ == '__main__':
