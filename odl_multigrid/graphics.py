@@ -102,6 +102,55 @@ def show_both(coarse_data, fine_data):
     # TODO: set aspect from physical sizes
     ax.set_aspect('auto', 'box')
 
+def show_all(data, low=None, high=None):
+    """Show all reconstructed resolutions in a single image. For multiple ROIs
+    
+    	data: list of reconstructions, with background given as data[0] and
+              subsequent ROI reconstructions given as data[1], data[2], ...
+ 
+	low: lower bound of dynamic range. If 'None' set to min(data)
+
+	high: upper bound of dynamic range. If 'None' set to max(data)
+    """
+    # Lazy import, can be slow
+    import matplotlib as mpl
+    import matplotlib.pyplot as plt
+    from matplotlib.image import BboxImage
+    from matplotlib.transforms import Bbox, TransformedBbox
+
+    fig, ax = plt.subplots()
+    
+    ax.set_xlim(data[0].space.min_pt[0], data[0].space.max_pt[0])
+    ax.set_ylim(data[0].space.min_pt[1], data[0].space.max_pt[1])
+
+    if low is None:
+        low = min([np.min(data[0]), np.min(data[1])])
+    if high is None:
+        high = max([np.max(data[0]), np.max(data[1])])
+
+    normalization = mpl.colors.Normalize(vmin=low, vmax=high)
+
+    def show(data, eps=0.0):
+        # Make box slightly larger
+        box_extent = data.space.partition.extent * (1.0 + eps)
+        box_min = data.space.min_pt - data.space.partition.extent * eps / 2.0
+
+        bbox0 = Bbox.from_bounds(*box_min, *box_extent)
+        bbox = TransformedBbox(bbox0, ax.transData)
+        # TODO: adapt interpolation
+        bbox_image = BboxImage(bbox, norm=normalization, cmap='bone',
+                               interpolation='nearest', origin=False)
+        bbox_image.set_data(np.asarray(data).T)
+        ax.add_artist(bbox_image)
+
+    for i in range(data.shape[0]):
+        if i == 0:
+            show(data[0])
+        else:
+            show(data[i], eps=0.01)
+
+    # TODO: set aspect from physical sizes
+    ax.set_aspect('auto', 'box')
 
 if __name__ == '__main__':
     from odl.util.testutils import run_doctests
